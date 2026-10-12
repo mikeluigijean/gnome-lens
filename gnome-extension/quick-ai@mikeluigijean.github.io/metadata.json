@@ -1,0 +1,8 @@
+{
+  "uuid": "quick-ai@mikeluigijean.github.io",
+  "name": "Quick AI",
+  "description": "Open and close an AI chat window (ChatGPT, Claude, Gemini) with a keyboard shortcut.\nYour logins and conversations stay alive between openings.\n\nRequires WebKitGTK 6 (Ubuntu/Debian: gir1.2-webkit-6.0).",
+  "shell-version": ["48", "49", "50", "51"],
+  "url": "https://github.com/mikeluigijean/quick-ai",
+  "settings-schema": "org.gnome.shell.extensions.quick-ai"
+}

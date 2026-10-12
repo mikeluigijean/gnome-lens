@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <enum id="org.gnome.shell.extensions.quick-ai.position">
+    <value nick="pointer" value="0"/>
+    <value nick="center" value="1"/>
+  </enum>
+  <schema id="org.gnome.shell.extensions.quick-ai" path="/org/gnome/shell/extensions/quick-ai/">
+    <key name="toggle-chat" type="as">
+      <default><![CDATA[['<Control><Alt>a']]]></default>
+      <summary>Shortcut that shows or hides the chat window</summary>
+    </key>
+    <key name="active-site" type="s">
+      <default>'chatgpt'</default>
+      <summary>Site shown in the chat window (id from lib/sites.js)</summary>
+    </key>
+    <key name="window-position" enum="org.gnome.shell.extensions.quick-ai.position">
+      <default>'pointer'</default>
+      <summary>Where the window opens: next to the pointer or centered</summary>
+    </key>
+    <key name="window-width" type="i">
+      <default>480</default>
+      <summary>Window width</summary>
+    </key>
+    <key name="window-height" type="i">
+      <default>720</default>
+      <summary>Window height</summary>
+    </key>
+    <key name="pinned" type="b">
+      <default>false</default>
+      <summary>Keep the window open when it loses focus</summary>
+    </key>
+    <key name="show-panel-icon" type="b">
+      <default>true</default>
+      <summary>Show the top bar icon</summary>
+    </key>
+  </schema>
+</schemalist>

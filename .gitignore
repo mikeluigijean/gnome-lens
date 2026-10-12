@@ -1,0 +1,6 @@
+# Compiled by install.sh / gnome-extensions pack; extensions.gnome.org compiles its own
+gschemas.compiled
+*.shell-extension.zip
+# ESLint (npx / local dev install)
+node_modules
+dist/
