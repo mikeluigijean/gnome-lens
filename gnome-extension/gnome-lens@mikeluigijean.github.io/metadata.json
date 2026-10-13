@@ -7,5 +7,5 @@
   ],
   "url": "https://github.com/mikeluigijean/gnome-lens",
   "settings-schema": "org.gnome.shell.extensions.gnome-lens",
-  "version-name": "0.3"
+  "version-name": "0.3.1"
 }

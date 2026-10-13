@@ -10,6 +10,8 @@ import {Keys, Position, WEBKIT_INSTALL_CMD} from './lib/constants.js';
 import {LANGUAGES, targetLanguage} from './lib/prompts.js';
 import {SITES, siteIndex} from './lib/sites.js';
 
+const DICT_URL = 'https://github.com/sunwxg/gnome-shell-extension-dict';
+
 const POSITIONS = [
     {id: Position.POINTER, name: 'Next to the pointer'},
     {id: Position.CENTER, name: 'Centered'},
@@ -141,5 +143,17 @@ export default class GnomeLensPreferences extends ExtensionPreferences {
         const iconRow = new Adw.SwitchRow({title: 'Show icon in the top bar'});
         settings.bind(Keys.SHOW_PANEL_ICON, iconRow, 'active', Gio.SettingsBindFlags.DEFAULT);
         panelGroup.add(iconRow);
+
+        // ---- about ----
+        const aboutGroup = new Adw.PreferencesGroup({title: 'About'});
+        page.add(aboutGroup);
+        const creditRow = new Adw.ActionRow({
+            title: 'Inspired by Screen word translate',
+            subtitle: 'by Xiaoguang Wang (MIT)',
+        });
+        const creditLink = new Gtk.LinkButton({uri: DICT_URL, label: 'Source', valign: Gtk.Align.CENTER});
+        creditRow.add_suffix(creditLink);
+        creditRow.activatable_widget = creditLink;
+        aboutGroup.add(creditRow);
     }
 }

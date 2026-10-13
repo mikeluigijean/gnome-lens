@@ -1,7 +1,5 @@
 # Notes for extensions.gnome.org reviewers
 
-Paste into the "notes for the reviewer" field when uploading.
-
 **About the automated checker (Shexli) findings**
 - *EGO-P-007, files not reachable from extension.js/prefs.js* (`app/*.js`, `lib/dbusIface.js`): these are the bundled chat
   app described below. They aren't imported by the extension because they run in their own process:

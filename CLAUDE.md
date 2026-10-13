@@ -88,13 +88,14 @@ gnome-extension/gnome-lens@mikeluigijean.github.io/
       - Last resort if the text doesn't stick: `Gdk.ContentProvider` on the real clipboard + toast. (`Gdk.Clipboard.set_text` isn't introspectable.)
 - [x] v0.2 committed (`07633b2`, with the searchable language dropdown and pinned-by-default).
 - [x] Renamed Quick AI → Gnome Lens (`33a8b55`): GitHub repo renamed too. The user's logins were moved to `~/.local/share/gnome-lens`.
-      The local checkout is still `~/scripts/quick-ai` (renaming it is left to the user; re-run install.sh after).
+      The local checkout was renamed to `~/scripts/gnome-lens` on 2026-10-13 (install.sh re-run).
 - [x] v0.3 EGO-ready: cleanup removed the unused D-Bus `Show`/`Hide` and `Visible`/`Pinned`, sites' `kind`, the per-site `composer`
       selector, `DEFAULT_SITE_ID`. Verified: the Shell 50 `extensionDownloader.js` runs `glib-compile-schemas --strict` on the
       extension's `schemas/` after an EGO install, so `app/settings.js` works; a simulated install from the `pack.sh` zip starts the app
       and it quits cleanly.
 - [x] User test in gnome-shell on 2026-10-13 (card, Lens hotkey, selection hotkey, prefs language dropdown, DND fallback, Claude,
       clean disable): everything works. Tagged `v0.2` (at `07633b2`) and `v0.3`.
+- [x] Credits (2026-10-13): LICENSE holder fixed to "2019 Xiaoguang Wang"; README Credits expanded; prefs "About" group links to Dict.
 - [ ] User: listing screenshots, `./pack.sh`, upload `dist/*.zip` to extensions.gnome.org with `docs/review-notes.md`.
 
 ## Design notes worked out for the remaining code

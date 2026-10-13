@@ -34,14 +34,29 @@ Requires WebKitGTK 6:
 sudo apt install gir1.2-webkit-6.0
 ```
 
-Then from this repository:
+Gnome Lens is not on extensions.gnome.org (see [How it was made](#how-it-was-made)). Install it one of these ways:
+
+**From a release:** download `gnome-lens@mikeluigijean.github.io.shell-extension.zip` from the
+[latest release](https://github.com/mikeluigijean/gnome-lens/releases/latest), then:
+
+```bash
+gnome-extensions install --force gnome-lens@mikeluigijean.github.io.shell-extension.zip
+```
+
+**From this repository** (to follow `main`):
 
 ```bash
 git clone https://github.com/mikeluigijean/gnome-lens.git ~/scripts/gnome-lens
 ~/scripts/gnome-lens/install.sh
 ```
 
-Log out and back in once (Wayland only discovers new extensions at login).
+Log out and back in once (Wayland only discovers new extensions at login), then enable it:
+
+```bash
+gnome-extensions enable gnome-lens@mikeluigijean.github.io
+```
+
+Updates from a release are not automatic: install the newer zip the same way.
 
 ## How it works
 
@@ -65,7 +80,16 @@ gdbus call --session -d io.github.mikeluigijean.GnomeLens -o /io/github/mikeluig
 `./pack.sh` runs the tests and builds `dist/gnome-lens@mikeluigijean.github.io.shell-extension.zip` for extensions.gnome.org
 (notes for reviewers: `docs/review-notes.md`).
 
+## How it was made
+
+The code in this repository was written by Claude (Anthropic's AI assistant) in Claude Code, from a plan and
+decisions made with the author. [`CLAUDE.md`](CLAUDE.md) is the working notes it kept along the way.
+extensions.gnome.org doesn't accept AI-generated extensions, so Gnome Lens is distributed from GitHub only.
+
 ## Credits
 
-Inspired by [Screen word translate](https://github.com/sunwxg/gnome-shell-extension-dict)
-(MIT); the window placement is ported from it. License: MIT.
+Gnome Lens started from [Screen word translate](https://github.com/sunwxg/gnome-shell-extension-dict)
+by Xiaoguang Wang (MIT). It took two things from it: the idea of a popup web window run as a separate GTK app
+that the extension controls over D-Bus, and the window placement next to the pointer, which is ported from it.
+
+License: MIT (see `LICENSE`, which keeps Screen word translate's copyright notice for the ported code).
