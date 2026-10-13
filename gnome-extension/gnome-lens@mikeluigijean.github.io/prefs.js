@@ -24,6 +24,7 @@ function isValidAccelerator(text) {
 function shortcutRow(settings, key, title) {
     const row = new Adw.EntryRow({
         title: `${title} (e.g. <Control><Alt>a)`,
+        use_markup: false, // the example would be parsed as markup tags
         text: settings.get_strv(key)[0] ?? '',
         show_apply_button: true,
     });

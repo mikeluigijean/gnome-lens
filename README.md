@@ -20,6 +20,12 @@ The content is attached to the prompt box of the site you're using, with a ready
 
 Tested on Ubuntu 26.04 with GNOME Shell 50.1 (Wayland).
 
+## Screenshots
+
+| Chat window | After a screenshot | Preferences |
+|---|---|---|
+| ![The chat window with ChatGPT, after Translate](docs/screenshots/chat-window.png) | ![The "Ask Gnome Lens" card with Ask, Translate and Copy text](docs/screenshots/screenshot-card.png) | ![The preferences window](docs/screenshots/preferences.png) |
+
 ## Install
 
 Requires WebKitGTK 6:
