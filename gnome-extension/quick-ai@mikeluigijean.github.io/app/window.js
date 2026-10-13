@@ -1,11 +1,13 @@
 // The chat window: a header bar (pin, site switcher, prefs) over a stack of lazily created site views.
 // Hiding never destroys anything, so every site keeps its page and conversation.
 import Adw from 'gi://Adw?version=1';
+import Gdk from 'gi://Gdk?version=4.0';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Gtk from 'gi://Gtk?version=4.0';
 
 import {Keys, UUID} from '../lib/constants.js';
+import {imagePrompt, targetLanguage, textPrompt} from '../lib/prompts.js';
 import {SITES, findSite, siteIndex} from '../lib/sites.js';
 import {SiteView} from './siteView.js';
 
@@ -64,6 +66,37 @@ export class ChatWindow {
         this._window.set_visible(false);
     }
 
+    /**
+     * Lens: show the chat and attach an image (with a prompt) or a text prompt to the active site.
+     * Never sends; tells the user with a toast when something couldn't be attached.
+     * @param {{png?: Uint8Array, text?: string, action: string}} request
+     */
+    async ask({png = null, text = '', action}) {
+        this.show();
+        const language = targetLanguage(GLib.get_language_names(),
+            this._settings.get_string(Keys.TRANSLATE_LANGUAGE));
+        const prompt = png ? imagePrompt(action, language) : textPrompt(action, text, language);
+        const view = this._views.get(findSite(this._settings.get_string(Keys.ACTIVE_SITE)).id);
+
+        let result;
+        try {
+            result = await view.ask({png, text: prompt});
+        } catch (e) {
+            logError(e, 'Quick AI: ask failed');
+            result = {composer: false};
+        }
+        if (!result.composer) {
+            this._toast('Couldn’t find the message box. Are you signed in?');
+            return;
+        }
+        if (png && !result.image)
+            this._toast('This site didn’t accept the image');
+        if (!result.text) {
+            this._window.get_clipboard().set_content(Gdk.ContentProvider.new_for_value(prompt));
+            this._toast('Prompt copied: paste it with Ctrl+V');
+        }
+    }
+
     toggle() {
         if (this.visible)
             this.hide();
@@ -101,7 +134,8 @@ export class ChatWindow {
         header.pack_end(prefs);
 
         this._stack = new Gtk.Stack({hexpand: true, vexpand: true});
-        const toolbar = new Adw.ToolbarView({content: this._stack});
+        this._toasts = new Adw.ToastOverlay({child: this._stack});
+        const toolbar = new Adw.ToolbarView({content: this._toasts});
         toolbar.add_top_bar(header);
         return toolbar;
     }
@@ -127,6 +161,10 @@ export class ChatWindow {
             view.load();
         }
         this._stack.set_visible_child_name(site.id);
+    }
+
+    _toast(title) {
+        this._toasts.add_toast(new Adw.Toast({title, timeout: 4}));
     }
 
     _openPrefs() {

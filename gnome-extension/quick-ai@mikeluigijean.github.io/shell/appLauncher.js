@@ -20,12 +20,13 @@ export class AppLauncher {
             () => this._onAppeared(), () => this._onVanished());
     }
 
-    call(method) {
+    /** @param {GLib.Variant|null} params tuple, e.g. for AskText `(ss)` */
+    call(method, params = null) {
         if (this._onBus) {
-            this._send(method);
+            this._send(method, params);
             return;
         }
-        this._pending.push(method);
+        this._pending.push([method, params]);
         if (this._watchReported && !this._proc)
             this._spawn();
     }
@@ -48,7 +49,7 @@ export class AppLauncher {
         this._watchReported = true;
         const pending = this._pending;
         this._pending = [];
-        pending.forEach(method => this._send(method));
+        pending.forEach(([method, params]) => this._send(method, params));
     }
 
     _onVanished() {
@@ -84,8 +85,8 @@ export class AppLauncher {
         });
     }
 
-    _send(method) {
-        Gio.DBus.session.call(BUS_NAME, OBJECT_PATH, IFACE, method, null, null,
+    _send(method, params = null) {
+        Gio.DBus.session.call(BUS_NAME, OBJECT_PATH, IFACE, method, params, null,
             Gio.DBusCallFlags.NONE, -1, null, (connection, result) => {
                 try {
                     connection.call_finish(result);

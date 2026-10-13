@@ -5,7 +5,8 @@ const EXT = '../gnome-extension/quick-ai@mikeluigijean.github.io/lib';
 const {computePosition} = await import(`${EXT}/placement.js`);
 const {SITES, findSite, siteIndex, DEFAULT_SITE_ID} = await import(`${EXT}/sites.js`);
 const {QUICK_AI_IFACE_XML} = await import(`${EXT}/dbusIface.js`);
-const {IFACE, Position} = await import(`${EXT}/constants.js`);
+const {IFACE, Position, Action} = await import(`${EXT}/constants.js`);
+const {LANGUAGES, targetLanguage, imagePrompt, textPrompt} = await import(`${EXT}/prompts.js`);
 
 const tests = [];
 const test = (name, fn) => tests.push([name, fn]);
@@ -62,8 +63,33 @@ test('unknown site id falls back to the default', () => {
 // ---------- D-Bus interface ----------
 test('interface XML parses and has the expected members', () => {
     const iface = Gio.DBusNodeInfo.new_for_xml(QUICK_AI_IFACE_XML).lookup_interface(IFACE);
-    eq(iface.methods.map(m => m.name), ['Toggle', 'Show', 'Hide', 'Quit']);
+    eq(iface.methods.map(m => m.name), ['Toggle', 'Show', 'Hide', 'Quit', 'AskImage', 'AskText']);
+    eq(iface.lookup_method('AskImage').in_args.map(a => a.signature), ['ay', 's']);
     eq(iface.properties.map(p => p.name), ['Visible', 'Pinned']);
+});
+
+// ---------- prompts ----------
+test('target language: from the locale list, skipping C', () => {
+    eq(targetLanguage(['fr_FR.UTF-8', 'fr_FR', 'fr', 'C']), 'French');
+    eq(targetLanguage(['C.UTF-8', 'C']), 'English');
+    eq(targetLanguage([]), 'English');
+});
+test('target language: the override wins', () => {
+    eq(targetLanguage(['fr_FR'], '  Haitian Creole '), 'Haitian Creole');
+});
+test('language list is sorted and unique', () => {
+    eq([...LANGUAGES].sort(), LANGUAGES);
+    eq(new Set(LANGUAGES).size, LANGUAGES.length);
+});
+test('image prompts per action', () => {
+    eq(imagePrompt(Action.TRANSLATE, 'German'), 'Translate the text in this image into German.');
+    eq(imagePrompt(Action.OCR, 'German').startsWith('Extract all the text'), true);
+    eq(imagePrompt(Action.ASK, 'German'), 'What is this? Explain it.');
+    eq(imagePrompt('unknown', 'German'), 'What is this? Explain it.');
+});
+test('text prompt quotes the trimmed selection', () => {
+    eq(textPrompt(Action.ASK, '  hi \n', 'French'), 'Explain this:\n\nhi');
+    eq(textPrompt(Action.TRANSLATE, 'hi', 'French'), 'Translate this into French:\n\nhi');
 });
 
 // ---------- run ----------

@@ -6,9 +6,17 @@ openings: the window is hidden, never reloaded.
 
 - Shortcut: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>A</kbd> by default (changeable in preferences)
 - Opens next to the pointer or centered, on the current workspace; remembers its size
-- Hides when it loses focus, unless pinned (pin button in the header bar)
+- Pinned by default; unpin it (header bar) to hide it when it loses focus
 - Site switcher in the header bar; each site keeps its own conversation
-- Optional top bar icon with a menu (Show / hide chat, Preferences)
+- Optional top bar icon with a menu (Show / hide chat, Lens, Preferences)
+
+### Lens: ask about anything on screen
+- **After every screenshot** (Print key), a card in the top-right corner offers **Ask**, **Translate** and **Copy text**
+- <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>L</kbd> opens GNOME's screenshot tool; the area or window you capture goes straight to the chat
+- <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd> asks about the text you've highlighted (or the text or image you copied)
+
+The content is attached to the prompt box of the site you're using, with a ready-made prompt.
+**Nothing is sent until you press Enter.** Translations go into your system language (changeable in preferences).
 
 Tested on Ubuntu 26.04 with GNOME Shell 50.1 (Wayland).
 

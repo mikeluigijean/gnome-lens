@@ -17,9 +17,16 @@ export const Keys = Object.freeze({
     WINDOW_HEIGHT: 'window-height',
     PINNED: 'pinned',
     SHOW_PANEL_ICON: 'show-panel-icon',
+    LENS: 'lens',
+    ASK_SELECTION: 'ask-selection',
+    SCREENSHOT_CARD: 'screenshot-card',
+    TRANSLATE_LANGUAGE: 'translate-language',
 });
 
 export const Position = Object.freeze({POINTER: 'pointer', CENTER: 'center'});
+
+// What to ask about a screenshot / selection (lib/prompts.js turns these into prompts).
+export const Action = Object.freeze({ASK: 'ask', TRANSLATE: 'translate', OCR: 'ocr'});
 
 // Exit code of app/main.js when WebKit 6 is missing; the shell turns it into an install hint.
 export const EXIT_NO_WEBKIT = 2;

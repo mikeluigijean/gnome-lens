@@ -3,7 +3,7 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
-import {Keys} from '../lib/constants.js';
+import {Action, Keys} from '../lib/constants.js';
 import {QUICK_AI_IFACE_XML} from '../lib/dbusIface.js';
 
 export class QuickAIService {
@@ -44,6 +44,21 @@ export class QuickAIService {
 
     Hide() {
         this._window?.hide();
+    }
+
+    AskImage(png, action) {
+        this._ask({png, action});
+    }
+
+    AskText(text, action) {
+        this._ask({text, action});
+    }
+
+    // Returns at once: the reply mustn't wait for the page to load.
+    _ask(request) {
+        if (!Object.values(Action).includes(request.action))
+            request.action = Action.ASK;
+        this._window?.ask(request).catch(e => logError(e, 'Quick AI: ask failed'));
     }
 
     Quit() {

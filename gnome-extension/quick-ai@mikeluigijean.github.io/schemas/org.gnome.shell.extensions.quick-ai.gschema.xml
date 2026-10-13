@@ -26,12 +26,28 @@
       <summary>Window height</summary>
     </key>
     <key name="pinned" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>Keep the window open when it loses focus</summary>
     </key>
     <key name="show-panel-icon" type="b">
       <default>true</default>
       <summary>Show the top bar icon</summary>
+    </key>
+    <key name="lens" type="as">
+      <default><![CDATA[['<Control><Alt>l']]]></default>
+      <summary>Shortcut that captures part of the screen and asks the AI about it</summary>
+    </key>
+    <key name="ask-selection" type="as">
+      <default><![CDATA[['<Control><Alt>s']]]></default>
+      <summary>Shortcut that asks the AI about the selected text (or the copied image)</summary>
+    </key>
+    <key name="screenshot-card" type="b">
+      <default>true</default>
+      <summary>After each screenshot, offer to ask Quick AI about it</summary>
+    </key>
+    <key name="translate-language" type="s">
+      <default>''</default>
+      <summary>Language to translate into (empty = system language)</summary>
     </key>
   </schema>
 </schemalist>

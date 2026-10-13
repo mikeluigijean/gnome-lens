@@ -28,6 +28,20 @@ Goal: ship a small v0.1 first. Later features (more sites, selection→chat, nat
   search entry, translate-shell + cache, Mdict, language dropdown, web toggles (mobile UA/JS/media/images),
   custom URL providers. **Later:** back/reload button.
 
+## Roadmap after v0.1 (grilled + approved 2026-10-13)
+Full plan: `~/.claude/plans/continue-the-v0-1-implementation-bright-hickey.md`. Target: **extensions.gnome.org, general users.**
+- **v0.2 Lens:** screenshot → AI. Every GNOME screenshot (`Main.screenshotUI` `'screenshot-taken'` signal) shows a top-right card
+  [Ask] [Translate] [Copy text]. A Lens hotkey opens the native screenshot UI and skips the card. A selection hotkey sends PRIMARY
+  text → CLIPBOARD text → clipboard image. Content goes to the **active site**, OCR is done by the AI, translation is into the
+  system language. **Attach-only: inject image/text + prompt, never press send** (this replaces v0.1's "no injection" rule).
+  Step 1 is a spike: does a synthetic `paste` ClipboardEvent attach images on ChatGPT/Claude/Gemini in WebKitGTK? The fallback is
+  the real clipboard + `execute_editing_command(PASTE)`.
+- **v0.3:** more preset sites + custom name/URL sites (enable/order); back/reload/open-in-browser; edge sidebar dock; always on top.
+- **v0.4:** EGO polish: the gschemas.compiled risk for the app, the EGO subprocess policy check, gettext, pack.sh, screenshots.
+- Not wanted: keeping the app alive across screen lock.
+- **Releases:** each version gets an annotated git tag (`v0.1`, `v0.2`, …), pushed with `git push origin <tag>`. From v0.2 on,
+  also set `"version-name"` in metadata.json to match.
+
 ## Layout
 ```
 install.sh  README.md  LICENSE  eslint.config.mjs  .gitignore  tests-js/run.js
@@ -42,7 +56,7 @@ gnome-extension/quick-ai@mikeluigijean.github.io/
 ## Progress
 - [x] Repo scaffold, LICENSE (credits Dict), .gitignore, eslint config, metadata.json
 - [x] gschema keys: `toggle-chat` as `['<Control><Alt>a']`, `active-site` 'chatgpt', `window-position` enum
-      pointer|center, `window-width` 480, `window-height` 720, `pinned` false, `show-panel-icon` true. `--strict --dry-run` passes.
+      pointer|center, `window-width` 480, `window-height` 720, `pinned` true (since v0.2), `show-panel-icon` true. `--strict --dry-run` passes.
 - [x] `lib/constants.js` (ids + `Keys`, `Position`), `lib/dbusIface.js` (`…QuickAI1`: Toggle/Show/Hide/Quit, props Visible/Pinned),
       `lib/sites.js` (`SITES`, `findSite`, `siteIndex`, `DEFAULT_SITE_ID`), `lib/placement.js` (`computePosition`)
 - [x] `tests-js/run.js`: 10/10 pass
@@ -56,7 +70,17 @@ gnome-extension/quick-ai@mikeluigijean.github.io/
       first `shown` (app id may not be set at `window-created`).
 - [x] Verification: the user ran the full manual checklist in gnome-shell on 2026-10-13; everything works.
       (Focus-dependent tests are done by the user: they work on the same desktop, so clicks elsewhere steal focus.)
-- [x] v0.1 committed and pushed to github.com/mikeluigijean/quick-ai (public).
+- [x] v0.1 committed and pushed to github.com/mikeluigijean/quick-ai (public), tagged `v0.1`.
+- [x] v0.2 Lens code: `lib/prompts.js` (+tests, 14/14), D-Bus `AskImage(ay,s)` / `AskText(s,s)` (bytes, not a temp path),
+      `app/injector.js`, `SiteView.ask`, `ChatWindow.ask` (+ toasts), `shell/screenshotWatcher.js`, `shell/lensCard.js` + `stylesheet.css`,
+      `shell/selection.js`, multi-key `shell/hotkeys.js`, prefs Lens group, metadata `version-name` 0.2.
+      **Injection findings** (headless SiteView+injector on a copy of the login data):
+      - A synthetic `paste` ClipboardEvent with a File attaches images on ChatGPT and Gemini (the clipboard is never touched).
+      - ChatGPT's composer is server-rendered before its paste handler exists, so the image paste is retried until handled.
+      - Text: `execCommand('insertText')`, falling back to a synthetic text paste; re-checked after hydration. Read with
+        `textContent` (`innerText` needs layout). Both verified on ChatGPT and Gemini. Claude untested (the app's session was logged out).
+      - Last resort if the text doesn't stick: `Gdk.ContentProvider` on the real clipboard + toast. (`Gdk.Clipboard.set_text` isn't introspectable.)
+- [ ] v0.2 user test in gnome-shell (card, Lens hotkey, selection hotkey, prefs, DND fallback, Claude), then commit + tag `v0.2`.
 
 ## Design notes worked out for the remaining code
 **app/**
