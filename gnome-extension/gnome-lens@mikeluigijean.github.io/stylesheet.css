@@ -1,5 +1,5 @@
 /* Lens card (shell/lensCard.js), same look as buds-notifier's cards. */
-.quick-ai-card {
+.gnome-lens-card {
   width: 320px;
   padding: 12px 14px;
   spacing: 10px;
@@ -9,32 +9,32 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
-.quick-ai-card-header {
+.gnome-lens-card-header {
   spacing: 10px;
 }
 
-.quick-ai-card-icon {
+.gnome-lens-card-icon {
   icon-size: 20px;
   color: #ffffff;
 }
 
-.quick-ai-card-title {
+.gnome-lens-card-title {
   font-weight: bold;
   font-size: 11pt;
 }
 
-.quick-ai-card-close {
+.gnome-lens-card-close {
   padding: 4px;
   border-radius: 99px;
   color: rgba(255, 255, 255, 0.7);
 }
 
-.quick-ai-card-close:hover {
+.gnome-lens-card-close:hover {
   background-color: rgba(255, 255, 255, 0.12);
   color: #ffffff;
 }
 
-.quick-ai-card-thumbnail {
+.gnome-lens-card-thumbnail {
   height: 140px;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.06);
@@ -43,11 +43,11 @@
   background-repeat: no-repeat;
 }
 
-.quick-ai-card-actions {
+.gnome-lens-card-actions {
   spacing: 8px;
 }
 
-.quick-ai-card-button {
+.gnome-lens-card-button {
   padding: 6px 10px;
   border-radius: 10px;
 }

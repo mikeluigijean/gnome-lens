@@ -1,4 +1,4 @@
-// "Ask Quick AI" card shown top-right after a screenshot: thumbnail + action buttons. Falls back to a
+// "Ask Gnome Lens" card shown top-right after a screenshot: thumbnail + action buttons. Falls back to a
 // regular notification when banners are off (Do Not Disturb) or the screen is locked.
 // Ported from buds-notifier's lib/popups.js (same author), reduced to one card at a time.
 import Clutter from 'gi://Clutter';
@@ -45,22 +45,22 @@ export class LensCard {
     _showCard(file, actions) {
         this._close(false);
         const card = new St.BoxLayout({
-            style_class: 'quick-ai-card',
+            style_class: 'gnome-lens-card',
             orientation: Clutter.Orientation.VERTICAL,
             reactive: true,
             track_hover: true,
         });
 
-        const header = new St.BoxLayout({style_class: 'quick-ai-card-header'});
-        header.add_child(new St.Icon({gicon: this._gicon, style_class: 'quick-ai-card-icon'}));
+        const header = new St.BoxLayout({style_class: 'gnome-lens-card-header'});
+        header.add_child(new St.Icon({gicon: this._gicon, style_class: 'gnome-lens-card-icon'}));
         header.add_child(new St.Label({
-            text: 'Ask Quick AI',
-            style_class: 'quick-ai-card-title',
+            text: 'Ask Gnome Lens',
+            style_class: 'gnome-lens-card-title',
             x_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         }));
         const close = new St.Button({
-            style_class: 'quick-ai-card-close',
+            style_class: 'gnome-lens-card-close',
             child: new St.Icon({icon_name: 'window-close-symbolic', icon_size: 14}),
         });
         close.connect('clicked', () => this._close(true));
@@ -68,13 +68,13 @@ export class LensCard {
         card.add_child(header);
 
         card.add_child(new St.Widget({
-            style_class: 'quick-ai-card-thumbnail',
+            style_class: 'gnome-lens-card-thumbnail',
             style: `background-image: url("${file.get_uri()}");`,
         }));
 
-        const buttons = new St.BoxLayout({style_class: 'quick-ai-card-actions'});
+        const buttons = new St.BoxLayout({style_class: 'gnome-lens-card-actions'});
         for (const {label, callback} of actions) {
-            const button = new St.Button({label, style_class: 'button quick-ai-card-button', x_expand: true});
+            const button = new St.Button({label, style_class: 'button gnome-lens-card-button', x_expand: true});
             button.connect('clicked', () => {
                 this._close(true);
                 callback();
@@ -106,7 +106,7 @@ export class LensCard {
 
     _notify(file, actions) {
         if (!this._source) {
-            this._source = new MessageTray.Source({title: 'Quick AI', gicon: this._gicon});
+            this._source = new MessageTray.Source({title: 'Gnome Lens', gicon: this._gicon});
             this._source.connect('destroy', () => {
                 this._source = null;
             });
@@ -114,7 +114,7 @@ export class LensCard {
         }
         const notification = new MessageTray.Notification({
             source: this._source,
-            title: 'Ask Quick AI',
+            title: 'Ask Gnome Lens',
             body: 'About the screenshot you just took',
             gicon: new Gio.FileIcon({file}),
         });

@@ -7,7 +7,7 @@ import GObject from 'gi://GObject';
 import System from 'system';
 
 import {APP_ID, EXIT_NO_WEBKIT, WEBKIT_INSTALL_CMD} from '../lib/constants.js';
-import {QuickAIService} from './dbusService.js';
+import {GnomeLensService} from './dbusService.js';
 import {getSettings} from './settings.js';
 import {createWebSession} from './webSession.js';
 import {ChatWindow} from './window.js';
@@ -16,13 +16,13 @@ let WebKit;
 try {
     WebKit = (await import('gi://WebKit?version=6.0')).default;
 } catch (e) {
-    printerr(`Quick AI: WebKit 6 is not available (${e.message}). ` +
+    printerr(`Gnome Lens: WebKit 6 is not available (${e.message}). ` +
         `Install it with: ${WEBKIT_INSTALL_CMD}`);
     System.exit(EXIT_NO_WEBKIT);
 }
 
-const QuickAIApp = GObject.registerClass(
-class QuickAIApp extends Adw.Application {
+const GnomeLensApp = GObject.registerClass(
+class GnomeLensApp extends Adw.Application {
     _init(settings) {
         super._init({application_id: APP_ID, flags: Gio.ApplicationFlags.DEFAULT_FLAGS});
         this._settings = settings;
@@ -34,7 +34,7 @@ class QuickAIApp extends Adw.Application {
     vfunc_dbus_register(connection, objectPath) {
         if (!super.vfunc_dbus_register(connection, objectPath))
             return false;
-        this._service = new QuickAIService({settings: this._settings, onQuit: () => this.quit()});
+        this._service = new GnomeLensService({settings: this._settings, onQuit: () => this.quit()});
         this._service.export(connection, objectPath);
         return true;
     }
@@ -68,6 +68,6 @@ class QuickAIApp extends Adw.Application {
     }
 });
 
-const app = new QuickAIApp(getSettings());
+const app = new GnomeLensApp(getSettings());
 const status = await app.runAsync([System.programInvocationName, ...ARGV]);
 System.exit(status);

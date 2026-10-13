@@ -1,10 +1,10 @@
 // Unit tests for the extension's pure-JS modules.  Run:  gjs -m tests-js/run.js
 import Gio from 'gi://Gio';
 
-const EXT = '../gnome-extension/quick-ai@mikeluigijean.github.io/lib';
+const EXT = '../gnome-extension/gnome-lens@mikeluigijean.github.io/lib';
 const {computePosition} = await import(`${EXT}/placement.js`);
 const {SITES, findSite, siteIndex, DEFAULT_SITE_ID} = await import(`${EXT}/sites.js`);
-const {QUICK_AI_IFACE_XML} = await import(`${EXT}/dbusIface.js`);
+const {GNOME_LENS_IFACE_XML} = await import(`${EXT}/dbusIface.js`);
 const {IFACE, Position, Action} = await import(`${EXT}/constants.js`);
 const {LANGUAGES, targetLanguage, imagePrompt, textPrompt} = await import(`${EXT}/prompts.js`);
 
@@ -62,7 +62,7 @@ test('unknown site id falls back to the default', () => {
 
 // ---------- D-Bus interface ----------
 test('interface XML parses and has the expected members', () => {
-    const iface = Gio.DBusNodeInfo.new_for_xml(QUICK_AI_IFACE_XML).lookup_interface(IFACE);
+    const iface = Gio.DBusNodeInfo.new_for_xml(GNOME_LENS_IFACE_XML).lookup_interface(IFACE);
     eq(iface.methods.map(m => m.name), ['Toggle', 'Show', 'Hide', 'Quit', 'AskImage', 'AskText']);
     eq(iface.lookup_method('AskImage').in_args.map(a => a.signature), ['ay', 's']);
     eq(iface.properties.map(p => p.name), ['Visible', 'Pinned']);

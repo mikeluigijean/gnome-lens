@@ -91,13 +91,13 @@ export class AppLauncher {
                 try {
                     connection.call_finish(result);
                 } catch (e) {
-                    logError(e, `Quick AI: ${method} failed`);
+                    logError(e, `Gnome Lens: ${method} failed`);
                 }
             });
     }
 
     _fail(message) {
         this._pending = [];
-        Main.notify('Quick AI', message);
+        Main.notify('Gnome Lens', message);
     }
 }

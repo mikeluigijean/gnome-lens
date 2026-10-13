@@ -1,4 +1,4 @@
-// Quick AI: a hotkey shows/hides a window with a logged-in AI chat site, and Lens sends screenshots or
+// Gnome Lens: a hotkey shows/hides a window with a logged-in AI chat site, and Lens sends screenshots or
 // selected text to it. The window lives in a separate GTK/WebKit process (app/); this side launches it,
 // places its window, binds keys and watches screenshots.
 import Gio from 'gi://Gio';
@@ -16,12 +16,12 @@ import {ScreenshotWatcher} from './shell/screenshotWatcher.js';
 import {readSelection} from './shell/selection.js';
 import {WindowTracker} from './shell/windowTracker.js';
 
-export default class QuickAIExtension extends Extension {
+export default class GnomeLensExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
         this._launcher = new AppLauncher(this.dir);
         this._tracker = new WindowTracker(this._settings);
-        const gicon = Gio.FileIcon.new(this.dir.get_child('icons').get_child('quick-ai-symbolic.svg'));
+        const gicon = Gio.FileIcon.new(this.dir.get_child('icons').get_child('gnome-lens-symbolic.svg'));
         this._lensCard = new LensCard(gicon);
         this._screenshots = new ScreenshotWatcher((file, isLens) => this._onScreenshot(file, isLens));
         this._hotkeys = new Hotkeys(this._settings, {
@@ -79,7 +79,7 @@ export default class QuickAIExtension extends Extension {
                 const [bytes] = f.load_bytes_finish(result);
                 this._askImage(bytes, action);
             } catch (e) {
-                logError(e, 'Quick AI: cannot read the screenshot');
+                logError(e, 'Gnome Lens: cannot read the screenshot');
             }
         });
     }
@@ -101,7 +101,7 @@ export default class QuickAIExtension extends Extension {
             else if (content?.png)
                 this._askImage(content.png, Action.ASK);
             else
-                Main.notify('Quick AI', 'Select some text (or copy an image) first.');
+                Main.notify('Gnome Lens', 'Select some text (or copy an image) first.');
         });
     }
 }

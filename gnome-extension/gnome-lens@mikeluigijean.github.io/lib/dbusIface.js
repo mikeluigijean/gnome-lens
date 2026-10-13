@@ -1,8 +1,8 @@
 // The chat app's D-Bus interface: the one contract between the shell side and the app.
-// Versioned name (…QuickAI1): add methods freely, never change existing signatures.
+// Versioned name (…GnomeLens1): add methods freely, never change existing signatures.
 import {IFACE} from './constants.js';
 
-export const QUICK_AI_IFACE_XML = `
+export const GNOME_LENS_IFACE_XML = `
 <node>
   <interface name="${IFACE}">
     <method name="Toggle"/>

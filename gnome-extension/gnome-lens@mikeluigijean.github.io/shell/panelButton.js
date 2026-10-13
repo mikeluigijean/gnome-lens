@@ -6,9 +6,9 @@ import St from 'gi://St';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 
 export const PanelButton = GObject.registerClass(
-class QuickAIPanelButton extends PanelMenu.Button {
+class GnomeLensPanelButton extends PanelMenu.Button {
     _init({gicon, onToggle, onLens, onPreferences}) {
-        super._init(0.5, 'Quick AI');
+        super._init(0.5, 'Gnome Lens');
         this.add_child(new St.Icon({gicon, style_class: 'system-status-icon'}));
         this.menu.addAction('Show / hide chat', onToggle);
         this.menu.addAction('Lens: ask about part of the screen', onLens);

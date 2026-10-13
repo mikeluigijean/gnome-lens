@@ -1,9 +1,9 @@
-# Quick AI — GNOME Shell extension
+# Gnome Lens — GNOME Shell extension
 
 A hotkey opens and closes a popup window showing a **logged-in AI chat site** (ChatGPT / Claude / Gemini).
-The session stays alive between openings. The user types and sends prompts themselves; the extension does no
-text injection. Inspired by "Screen word translate" (`dict@sun.wxg@gmail.com`, MIT; user fork at
-`~/src/gnome-shell-extension-dict`). Full approved plan: `~/.claude/plans/you-see-this-translate-lively-mountain.md`.
+The session stays alive between openings. Since v0.2, Lens attaches screenshots / selected text to the prompt box;
+the user always presses send. Inspired by "Screen word translate" (`dict@sun.wxg@gmail.com`, MIT).
+Named **Quick AI** until 2026-10-13 (v0.1 and the v0.2 commit use that name), then renamed **Gnome Lens**.
 
 Goal: ship a small v0.1 first. Later features (more sites, selection→chat, native API chat, back/reload) must be
 **additive**, so keep modules small and pure where possible.
@@ -11,13 +11,13 @@ Goal: ship a small v0.1 first. Later features (more sites, selection→chat, nat
 ## Environment
 - Ubuntu 26.04, GNOME Shell 50.1 Wayland, gjs 1.88. Target `shell-version` 48–51 (only 50 is testable locally).
 - WebKit 6 (`gir1.2-webkit-6.0`), GTK4, Adw-1 and Soup-3 are installed (Claude has no sudo).
-- `npx eslint@9 .` fails: `@eslint/js` isn't resolvable (no local node_modules, same in buds-notifier). Lint with a
+- `npx eslint@9 .` fails: `@eslint/js` isn't resolvable (no local node_modules). Lint with a
   scratch install instead: `npm i eslint@9 @eslint/js@9` in a scratch dir, copy the config there, run `eslint -c <scratch>/eslint.config.mjs .`.
-- Conventions are copied from the user's own extension `~/scripts/buds-notifier`: `lib/` modules, `tests-js/run.js` run
+- Conventions are copied from the author's other extension (buds-notifier): `lib/` modules, `tests-js/run.js` run
   with `gjs -m`, `eslint.config.mjs` (`npx eslint@9 .`), symlinking `install.sh`, Adw `fillPreferencesWindow`.
 
 ## Decisions (from the grill-me interview — don't re-ask)
-- New repo (not a fork). Name **Quick AI**, UUID `quick-ai@mikeluigijean.github.io`, app/bus id `io.github.mikeluigijean.QuickAI`.
+- New repo (not a fork). Name **Gnome Lens**, UUID `gnome-lens@mikeluigijean.github.io`, app/bus id `io.github.mikeluigijean.GnomeLens`.
 - Web view of AI sites (no API keys). Same session continues: never reload a view once it's loaded.
 - Sites in v0.1: ChatGPT, Claude, Gemini. One WebView per site (lazy), so each keeps its own conversation.
 - GTK4 + WebKit 6, in a **separate gjs process** controlled over D-Bus (GNOME Shell can't host WebKit).
@@ -29,7 +29,7 @@ Goal: ship a small v0.1 first. Later features (more sites, selection→chat, nat
   custom URL providers. **Later:** back/reload button.
 
 ## Roadmap after v0.1 (grilled + approved 2026-10-13)
-Full plan: `~/.claude/plans/continue-the-v0-1-implementation-bright-hickey.md`. Target: **extensions.gnome.org, general users.**
+Target: **extensions.gnome.org, general users.**
 - **v0.2 Lens:** screenshot → AI. Every GNOME screenshot (`Main.screenshotUI` `'screenshot-taken'` signal) shows a top-right card
   [Ask] [Translate] [Copy text]. A Lens hotkey opens the native screenshot UI and skips the card. A selection hotkey sends PRIMARY
   text → CLIPBOARD text → clipboard image. Content goes to the **active site**, OCR is done by the AI, translation is into the
@@ -45,9 +45,9 @@ Full plan: `~/.claude/plans/continue-the-v0-1-implementation-bright-hickey.md`. 
 ## Layout
 ```
 install.sh  README.md  LICENSE  eslint.config.mjs  .gitignore  tests-js/run.js
-gnome-extension/quick-ai@mikeluigijean.github.io/
-  metadata.json  extension.js  prefs.js  icons/quick-ai-symbolic.svg
-  schemas/org.gnome.shell.extensions.quick-ai.gschema.xml
+gnome-extension/gnome-lens@mikeluigijean.github.io/
+  metadata.json  extension.js  prefs.js  icons/gnome-lens-symbolic.svg
+  schemas/org.gnome.shell.extensions.gnome-lens.gschema.xml
   lib/    pure, no Shell/Gtk imports, unit-tested: constants.js dbusIface.js sites.js placement.js
   shell/  runs in gnome-shell: appLauncher.js hotkeys.js windowTracker.js panelButton.js
   app/    separate process (gjs -m app/main.js): main.js dbusService.js window.js siteView.js webSession.js settings.js
@@ -57,10 +57,10 @@ gnome-extension/quick-ai@mikeluigijean.github.io/
 - [x] Repo scaffold, LICENSE (credits Dict), .gitignore, eslint config, metadata.json
 - [x] gschema keys: `toggle-chat` as `['<Control><Alt>a']`, `active-site` 'chatgpt', `window-position` enum
       pointer|center, `window-width` 480, `window-height` 720, `pinned` true (since v0.2), `show-panel-icon` true. `--strict --dry-run` passes.
-- [x] `lib/constants.js` (ids + `Keys`, `Position`), `lib/dbusIface.js` (`…QuickAI1`: Toggle/Show/Hide/Quit, props Visible/Pinned),
+- [x] `lib/constants.js` (ids + `Keys`, `Position`), `lib/dbusIface.js` (`…GnomeLens1`: Toggle/Show/Hide/Quit, props Visible/Pinned),
       `lib/sites.js` (`SITES`, `findSite`, `siteIndex`, `DEFAULT_SITE_ID`), `lib/placement.js` (`computePosition`)
 - [x] `tests-js/run.js`: 10/10 pass
-- [x] `icons/quick-ai-symbolic.svg` (Adwaita has no chat icon; load it with `Gio.FileIcon`)
+- [x] `icons/gnome-lens-symbolic.svg` (Adwaita has no chat icon; load it with `Gio.FileIcon`)
 - [x] `app/`: verified standalone via gdbus (Toggle/Show/Hide/Quit, Visible/Pinned signals, site switch from
       gsettings, pinned stays open, cookies.sqlite created, clean exit). Window size is saved with `get_default_size()`
       (GTK4 tracks resizes there), not `get_width/get_height`. Not yet seen by eye: page rendering, sign-in popups, file-chooser hold.
@@ -70,7 +70,7 @@ gnome-extension/quick-ai@mikeluigijean.github.io/
       first `shown` (app id may not be set at `window-created`).
 - [x] Verification: the user ran the full manual checklist in gnome-shell on 2026-10-13; everything works.
       (Focus-dependent tests are done by the user: they work on the same desktop, so clicks elsewhere steal focus.)
-- [x] v0.1 committed and pushed to github.com/mikeluigijean/quick-ai (public), tagged `v0.1`.
+- [x] v0.1 committed and pushed to github.com/mikeluigijean/gnome-lens (public), tagged `v0.1`.
 - [x] v0.2 Lens code: `lib/prompts.js` (+tests, 14/14), D-Bus `AskImage(ay,s)` / `AskText(s,s)` (bytes, not a temp path),
       `app/injector.js`, `SiteView.ask`, `ChatWindow.ask` (+ toasts), `shell/screenshotWatcher.js`, `shell/lensCard.js` + `stylesheet.css`,
       `shell/selection.js`, multi-key `shell/hotkeys.js`, prefs Lens group, metadata `version-name` 0.2.
@@ -91,14 +91,14 @@ gnome-extension/quick-ai@mikeluigijean.github.io/
   `vfunc_dbus_register(connection, objectPath)` (the GApplication object path equals `OBJECT_PATH`) and unexport in
   `vfunc_dbus_unregister`. `activate` only builds the window, **hidden** (a second launch must not toggle).
   `hold()` keeps the app alive.
-- `dbusService.js`: `Gio.DBusExportedObject.wrapJSObject(QUICK_AI_IFACE_XML, this)`. Methods delegate to the window
+- `dbusService.js`: `Gio.DBusExportedObject.wrapJSObject(GNOME_LENS_IFACE_XML, this)`. Methods delegate to the window
   controller. Run `Quit` from an idle callback so the reply is sent first. Call `emit_property_changed('Visible', …)` on show/hide.
-- `webSession.js`: one `WebKit.NetworkSession.new(~/.local/share/quick-ai, ~/.cache/quick-ai)` (dirs mode 0o700); its cookie manager
+- `webSession.js`: one `WebKit.NetworkSession.new(~/.local/share/gnome-lens, ~/.cache/gnome-lens)` (dirs mode 0o700); its cookie manager
   uses policy ALWAYS and `set_persistent_storage(cookies.sqlite, SQLITE)` (port of the user's Dict commit 8ff701f).
 - `siteView.js`: `class SiteView {constructor(site, session); get widget(); load()}`, which loads once only.
   Handle the WebView `create` signal: make a related WebView (`related_view`) in a transient Gtk.Window, show it on `ready-to-show`
   and destroy it on `close`. **This is required for OAuth/Google sign-in popups.** Later `NativeChatView` / adapters keep the same contract.
-- `window.js`: Adw.ApplicationWindow (title "Quick AI") + Adw.ToolbarView + Adw.HeaderBar. The title widget is a Gtk.DropDown
+- `window.js`: Adw.ApplicationWindow (title "Gnome Lens") + Adw.ToolbarView + Adw.HeaderBar. The title widget is a Gtk.DropDown
   of site names, bound to `active-site` (also react to `changed::active-site` from prefs).
   - Pin is a ToggleButton (`view-pin-symbolic`) bound to `pinned`. The prefs button calls
     `org.gnome.Shell.Extensions.OpenExtensionPrefs(UUID, '', {})` on `/org/gnome/Shell`.
@@ -143,7 +143,7 @@ gnome-extension/quick-ai@mikeluigijean.github.io/
 ## Verification
 - `gjs -m tests-js/run.js`; `npx eslint@9 .`; `glib-compile-schemas --strict --dry-run <ext>/schemas`.
 - App alone (after installing WebKit 6 and compiling schemas): `gjs -m app/main.js`, then
-  `gdbus call --session -d io.github.mikeluigijean.QuickAI -o /io/github/mikeluigijean/QuickAI -m io.github.mikeluigijean.QuickAI1.Toggle`.
+  `gdbus call --session -d io.github.mikeluigijean.GnomeLens -o /io/github/mikeluigijean/GnomeLens -m io.github.mikeluigijean.GnomeLens1.Toggle`.
 - Shell: `./install.sh`, log out and back in (Wayland), then watch `journalctl -f -o cat /usr/bin/gnome-shell`.
 - Manual checklist:
   - The hotkey opens the window at the pointer or centered, on the current workspace; pressing it again hides it.

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <enum id="org.gnome.shell.extensions.quick-ai.position">
+  <enum id="org.gnome.shell.extensions.gnome-lens.position">
     <value nick="pointer" value="0"/>
     <value nick="center" value="1"/>
   </enum>
-  <schema id="org.gnome.shell.extensions.quick-ai" path="/org/gnome/shell/extensions/quick-ai/">
+  <schema id="org.gnome.shell.extensions.gnome-lens" path="/org/gnome/shell/extensions/gnome-lens/">
     <key name="toggle-chat" type="as">
       <default><![CDATA[['<Control><Alt>a']]]></default>
       <summary>Shortcut that shows or hides the chat window</summary>
@@ -13,7 +13,7 @@
       <default>'chatgpt'</default>
       <summary>Site shown in the chat window (id from lib/sites.js)</summary>
     </key>
-    <key name="window-position" enum="org.gnome.shell.extensions.quick-ai.position">
+    <key name="window-position" enum="org.gnome.shell.extensions.gnome-lens.position">
       <default>'pointer'</default>
       <summary>Where the window opens: next to the pointer or centered</summary>
     </key>
@@ -43,7 +43,7 @@
     </key>
     <key name="screenshot-card" type="b">
       <default>true</default>
-      <summary>After each screenshot, offer to ask Quick AI about it</summary>
+      <summary>After each screenshot, offer to ask Gnome Lens about it</summary>
     </key>
     <key name="translate-language" type="s">
       <default>''</default>

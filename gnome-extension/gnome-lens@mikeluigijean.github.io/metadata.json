@@ -1,6 +1,6 @@
 {
-  "uuid": "quick-ai@mikeluigijean.github.io",
-  "name": "Quick AI",
+  "uuid": "gnome-lens@mikeluigijean.github.io",
+  "name": "Gnome Lens",
   "description": "Open and close an AI chat window (ChatGPT, Claude, Gemini) with a keyboard shortcut, and ask it about anything on your screen (Lens).\nYour logins and conversations stay alive between openings.\n\nRequires WebKitGTK 6 (Ubuntu/Debian: gir1.2-webkit-6.0).",
   "shell-version": [
     "48",
@@ -8,7 +8,7 @@
     "50",
     "51"
   ],
-  "url": "https://github.com/mikeluigijean/quick-ai",
-  "settings-schema": "org.gnome.shell.extensions.quick-ai",
+  "url": "https://github.com/mikeluigijean/gnome-lens",
+  "settings-schema": "org.gnome.shell.extensions.gnome-lens",
   "version-name": "0.2"
 }

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Install the Quick AI GNOME Shell extension from this repository (development, or installing
+# Install the Gnome Lens GNOME Shell extension from this repository (development, or installing
 # without extensions.gnome.org). Safe to re-run; needs no sudo.
 set -euo pipefail
 
-UUID="quick-ai@mikeluigijean.github.io"
+UUID="gnome-lens@mikeluigijean.github.io"
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC="$REPO_DIR/gnome-extension/$UUID"
 EXT_DIR="$HOME/.local/share/gnome-shell/extensions"

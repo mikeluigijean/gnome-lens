@@ -58,12 +58,12 @@ function languageRow(settings) {
     return row;
 }
 
-export default class QuickAIPreferences extends ExtensionPreferences {
+export default class GnomeLensPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
         window._settings = settings;
 
-        const page = new Adw.PreferencesPage({title: 'Quick AI', icon_name: 'preferences-system-symbolic'});
+        const page = new Adw.PreferencesPage({title: 'Gnome Lens', icon_name: 'preferences-system-symbolic'});
         window.add(page);
 
         // ---- status ----
@@ -127,7 +127,7 @@ export default class QuickAIPreferences extends ExtensionPreferences {
         lensGroup.add(shortcutRow(settings, Keys.LENS, 'Capture an area'));
         lensGroup.add(shortcutRow(settings, Keys.ASK_SELECTION, 'Ask about the selection'));
         const cardRow = new Adw.SwitchRow({
-            title: 'Offer “Ask Quick AI” after screenshots',
+            title: 'Offer “Ask Gnome Lens” after screenshots',
             subtitle: 'A card in the top-right corner after each screenshot',
         });
         settings.bind(Keys.SCREENSHOT_CARD, cardRow, 'active', Gio.SettingsBindFlags.DEFAULT);

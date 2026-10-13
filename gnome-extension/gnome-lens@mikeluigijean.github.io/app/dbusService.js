@@ -1,17 +1,17 @@
-// Exports the QuickAI1 interface (lib/dbusIface.js) that the shell side calls.
+// Exports the GnomeLens1 interface (lib/dbusIface.js) that the shell side calls.
 // GApplication registers on D-Bus before `startup` builds the window, so the window is attached later.
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
 import {Action, Keys} from '../lib/constants.js';
-import {QUICK_AI_IFACE_XML} from '../lib/dbusIface.js';
+import {GNOME_LENS_IFACE_XML} from '../lib/dbusIface.js';
 
-export class QuickAIService {
+export class GnomeLensService {
     constructor({settings, onQuit}) {
         this._settings = settings;
         this._onQuit = onQuit;
         this._window = null;
-        this._impl = Gio.DBusExportedObject.wrapJSObject(QUICK_AI_IFACE_XML, this);
+        this._impl = Gio.DBusExportedObject.wrapJSObject(GNOME_LENS_IFACE_XML, this);
         this._pinnedId = settings.connect(`changed::${Keys.PINNED}`, () =>
             this._impl.emit_property_changed('Pinned', GLib.Variant.new_boolean(this.Pinned)));
     }
@@ -58,7 +58,7 @@ export class QuickAIService {
     _ask(request) {
         if (!Object.values(Action).includes(request.action))
             request.action = Action.ASK;
-        this._window?.ask(request).catch(e => logError(e, 'Quick AI: ask failed'));
+        this._window?.ask(request).catch(e => logError(e, 'Gnome Lens: ask failed'));
     }
 
     Quit() {

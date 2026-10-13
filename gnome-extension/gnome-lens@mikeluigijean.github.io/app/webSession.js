@@ -3,8 +3,8 @@
 import GLib from 'gi://GLib';
 
 export function createWebSession(WebKit) {
-    const dataDir = GLib.build_filenamev([GLib.get_user_data_dir(), 'quick-ai']);
-    const cacheDir = GLib.build_filenamev([GLib.get_user_cache_dir(), 'quick-ai']);
+    const dataDir = GLib.build_filenamev([GLib.get_user_data_dir(), 'gnome-lens']);
+    const cacheDir = GLib.build_filenamev([GLib.get_user_cache_dir(), 'gnome-lens']);
     for (const dir of [dataDir, cacheDir])
         GLib.mkdir_with_parents(dir, 0o700);
 

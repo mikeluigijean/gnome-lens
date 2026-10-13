@@ -34,7 +34,7 @@ export class ScreenshotWatcher {
         this._lensPending = true;
         this._ui.open().catch(e => {
             this._clearLens();
-            logError(e, 'Quick AI: cannot open the screenshot UI');
+            logError(e, 'Gnome Lens: cannot open the screenshot UI');
         });
     }
 

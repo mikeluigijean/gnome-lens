@@ -28,7 +28,7 @@ export class ChatWindow {
 
         this._window = new Adw.ApplicationWindow({
             application: app,
-            title: 'Quick AI',
+            title: 'Gnome Lens',
             default_width: settings.get_int(Keys.WINDOW_WIDTH),
             default_height: settings.get_int(Keys.WINDOW_HEIGHT),
         });
@@ -82,7 +82,7 @@ export class ChatWindow {
         try {
             result = await view.ask({png, text: prompt});
         } catch (e) {
-            logError(e, 'Quick AI: ask failed');
+            logError(e, 'Gnome Lens: ask failed');
             result = {composer: false};
         }
         if (!result.composer) {
@@ -176,7 +176,7 @@ export class ChatWindow {
                 try {
                     connection.call_finish(result);
                 } catch (e) {
-                    logError(e, 'Quick AI: cannot open preferences');
+                    logError(e, 'Gnome Lens: cannot open preferences');
                 }
             });
         this.hide();

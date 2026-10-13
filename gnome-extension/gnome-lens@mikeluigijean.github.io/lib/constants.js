@@ -1,13 +1,13 @@
 // Identifiers shared by the shell side, the chat app and prefs. Change them here only.
-export const UUID = 'quick-ai@mikeluigijean.github.io';
-export const SCHEMA_ID = 'org.gnome.shell.extensions.quick-ai';
+export const UUID = 'gnome-lens@mikeluigijean.github.io';
+export const SCHEMA_ID = 'org.gnome.shell.extensions.gnome-lens';
 
 // The chat app is a GTK application; its application id is also its D-Bus name and the
 // Wayland app id the shell uses to recognise its window.
-export const APP_ID = 'io.github.mikeluigijean.QuickAI';
+export const APP_ID = 'io.github.mikeluigijean.GnomeLens';
 export const BUS_NAME = APP_ID;
-export const OBJECT_PATH = '/io/github/mikeluigijean/QuickAI';
-export const IFACE = 'io.github.mikeluigijean.QuickAI1';
+export const OBJECT_PATH = '/io/github/mikeluigijean/GnomeLens';
+export const IFACE = 'io.github.mikeluigijean.GnomeLens1';
 
 export const Keys = Object.freeze({
     TOGGLE_CHAT: 'toggle-chat',
