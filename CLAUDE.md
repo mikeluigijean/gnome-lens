@@ -86,7 +86,7 @@ gnome-extension/gnome-lens@mikeluigijean.github.io/
       - Text: `execCommand('insertText')`, falling back to a synthetic text paste; re-checked after hydration. Read with
         `textContent` (`innerText` needs layout). Both verified on ChatGPT and Gemini. Claude untested (the app's session was logged out).
       - Last resort if the text doesn't stick: `Gdk.ContentProvider` on the real clipboard + toast. (`Gdk.Clipboard.set_text` isn't introspectable.)
-- [x] v0.2 committed (`07633b2`, with the searchable language dropdown and pinned-by-default), not tagged yet.
+- [x] v0.2 committed (`07633b2`, with the searchable language dropdown and pinned-by-default).
 - [x] Renamed Quick AI → Gnome Lens (`33a8b55`): GitHub repo renamed too. The user's logins were moved to `~/.local/share/gnome-lens`.
       The local checkout is still `~/scripts/quick-ai` (renaming it is left to the user; re-run install.sh after).
 - [x] v0.3 EGO-ready: cleanup removed the unused D-Bus `Show`/`Hide` and `Visible`/`Pinned`, sites' `kind`, the per-site `composer`
