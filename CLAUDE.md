@@ -93,8 +93,9 @@ gnome-extension/gnome-lens@mikeluigijean.github.io/
       selector, `DEFAULT_SITE_ID`. Verified: the Shell 50 `extensionDownloader.js` runs `glib-compile-schemas --strict` on the
       extension's `schemas/` after an EGO install, so `app/settings.js` works; a simulated install from the `pack.sh` zip starts the app
       and it quits cleanly.
-- [ ] User test in gnome-shell (card, Lens hotkey, selection hotkey, prefs language dropdown, DND fallback, Claude), then tag `v0.2`
-      and `v0.3`, push, upload `dist/*.zip` to extensions.gnome.org with `docs/review-notes.md`, plus listing screenshots.
+- [x] User test in gnome-shell on 2026-10-13 (card, Lens hotkey, selection hotkey, prefs language dropdown, DND fallback, Claude,
+      clean disable): everything works. Tagged `v0.2` (at `07633b2`) and `v0.3`.
+- [ ] User: listing screenshots, `./pack.sh`, upload `dist/*.zip` to extensions.gnome.org with `docs/review-notes.md`.
 
 ## Design notes worked out for the remaining code
 **app/**
