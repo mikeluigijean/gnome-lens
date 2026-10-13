@@ -3,23 +3,18 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
-import {Action, Keys} from '../lib/constants.js';
+import {Action} from '../lib/constants.js';
 import {GNOME_LENS_IFACE_XML} from '../lib/dbusIface.js';
 
 export class GnomeLensService {
-    constructor({settings, onQuit}) {
-        this._settings = settings;
+    constructor({onQuit}) {
         this._onQuit = onQuit;
         this._window = null;
         this._impl = Gio.DBusExportedObject.wrapJSObject(GNOME_LENS_IFACE_XML, this);
-        this._pinnedId = settings.connect(`changed::${Keys.PINNED}`, () =>
-            this._impl.emit_property_changed('Pinned', GLib.Variant.new_boolean(this.Pinned)));
     }
 
     setWindow(chatWindow) {
         this._window = chatWindow;
-        chatWindow.onVisibilityChanged = visible =>
-            this._impl.emit_property_changed('Visible', GLib.Variant.new_boolean(visible));
     }
 
     export(connection, objectPath) {
@@ -27,23 +22,11 @@ export class GnomeLensService {
     }
 
     unexport() {
-        if (this._pinnedId) {
-            this._settings.disconnect(this._pinnedId);
-            this._pinnedId = 0;
-        }
         this._impl.unexport();
     }
 
     Toggle() {
         this._window?.toggle();
-    }
-
-    Show() {
-        this._window?.show();
-    }
-
-    Hide() {
-        this._window?.hide();
     }
 
     AskImage(png, action) {
@@ -67,13 +50,5 @@ export class GnomeLensService {
             this._onQuit();
             return GLib.SOURCE_REMOVE;
         });
-    }
-
-    get Visible() {
-        return this._window?.visible ?? false;
-    }
-
-    get Pinned() {
-        return this._settings.get_boolean(Keys.PINNED);
     }
 }

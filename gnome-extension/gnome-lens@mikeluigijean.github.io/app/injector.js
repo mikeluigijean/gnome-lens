@@ -11,12 +11,8 @@ const PAGE_SCRIPT = `
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const visible = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
 const area = el => { const r = el.getBoundingClientRect(); return r.width * r.height; };
+// The prompt box: the largest visible editable element.
 function findComposer() {
-    if (selector) {
-        const el = document.querySelector(selector);
-        if (el && visible(el))
-            return el;
-    }
     const all = [...document.querySelectorAll('[contenteditable="true"], textarea')].filter(visible);
     all.sort((a, b) => area(b) - area(a));
     return all[0] ?? null;
@@ -91,14 +87,13 @@ return report;
 
 /**
  * @param {WebKit.WebView} webView a loaded view
- * @param {{png?: Uint8Array, text?: string, composer?: string}} payload
+ * @param {{png?: Uint8Array, text?: string}} payload
  * @returns {Promise<{composer: boolean, text?: boolean, image?: boolean}>}
  */
-export function inject(webView, {png = null, text = '', composer = ''}) {
+export function inject(webView, {png = null, text = ''}) {
     const args = new GLib.Variant('a{sv}', {
         imageBase64: new GLib.Variant('s', png ? GLib.base64_encode(png) : ''),
         text: new GLib.Variant('s', text),
-        selector: new GLib.Variant('s', composer),
         waitMs: new GLib.Variant('i', COMPOSER_WAIT_MS),
     });
     return new Promise((resolve, reject) => {

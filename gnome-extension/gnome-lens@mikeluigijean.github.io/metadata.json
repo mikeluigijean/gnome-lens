@@ -1,14 +1,11 @@
 {
   "uuid": "gnome-lens@mikeluigijean.github.io",
   "name": "Gnome Lens",
-  "description": "Open and close an AI chat window (ChatGPT, Claude, Gemini) with a keyboard shortcut, and ask it about anything on your screen (Lens).\nYour logins and conversations stay alive between openings.\n\nRequires WebKitGTK 6 (Ubuntu/Debian: gir1.2-webkit-6.0).",
+  "description": "Open ChatGPT, Claude or Gemini in a popup window with a keyboard shortcut (Ctrl+Alt+A). You stay logged in, and conversations stay where you left them.\n\nLens: after each screenshot, a card offers to ask the AI about it, translate it or extract its text. Ctrl+Alt+L captures part of the screen and sends it straight to the chat. Ctrl+Alt+S asks about the highlighted text, or the text or image you copied (this reads the selection and the clipboard, only when you press it). The content is attached to the prompt box: nothing is sent until you press Enter.\n\nThe chat window is a small GTK/WebKit app bundled with the extension (GNOME Shell can't display web pages). It only loads the AI site you pick and keeps its logins in ~/.local/share/gnome-lens.\n\nRequires WebKitGTK 6: gir1.2-webkit-6.0 (Ubuntu/Debian), webkitgtk6.0 (Fedora), webkitgtk-6.0 (Arch).",
   "shell-version": [
-    "48",
-    "49",
-    "50",
-    "51"
+    "50"
   ],
   "url": "https://github.com/mikeluigijean/gnome-lens",
   "settings-schema": "org.gnome.shell.extensions.gnome-lens",
-  "version-name": "0.2"
+  "version-name": "0.3"
 }

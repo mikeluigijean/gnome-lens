@@ -56,6 +56,9 @@ gdbus call --session -d io.github.mikeluigijean.GnomeLens -o /io/github/mikeluig
     -m io.github.mikeluigijean.GnomeLens1.Toggle
 ```
 
+`./pack.sh` runs the tests and builds `dist/gnome-lens@mikeluigijean.github.io.shell-extension.zip` for extensions.gnome.org
+(notes for reviewers: `docs/review-notes.md`).
+
 ## Credits
 
 Inspired by [Screen word translate](https://github.com/sunwxg/gnome-shell-extension-dict)

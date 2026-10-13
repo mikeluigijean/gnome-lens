@@ -26,7 +26,7 @@ export class LensCard {
 
     /**
      * @param {Gio.File} file the screenshot
-     * @param {{id: string, label: string, callback: Function}[]} actions
+     * @param {{label: string, callback: Function}[]} actions
      */
     show(file, actions) {
         if (this._notificationSettings.get_boolean('show-banners') && !Main.sessionMode.isLocked)

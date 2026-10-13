@@ -1,5 +1,5 @@
 // GSettings for the chat app. The app isn't inside gnome-shell, so it loads the extension's own
-// compiled schema (schemas/gschemas.compiled, built by install.sh) instead of the system one.
+// compiled schema (schemas/gschemas.compiled, built when the extension is installed) instead of the system one.
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
@@ -16,7 +16,7 @@ export function getSettings() {
             schemaDir, Gio.SettingsSchemaSource.get_default(), false);
     } catch (e) {
         throw new Error(`Cannot load schemas from ${schemaDir} (${e.message}). ` +
-            `Run install.sh or glib-compile-schemas ${schemaDir}`);
+            `Run: glib-compile-schemas ${schemaDir}`);
     }
     const schema = source.lookup(SCHEMA_ID, false);
     if (!schema)

@@ -34,7 +34,7 @@ class GnomeLensApp extends Adw.Application {
     vfunc_dbus_register(connection, objectPath) {
         if (!super.vfunc_dbus_register(connection, objectPath))
             return false;
-        this._service = new GnomeLensService({settings: this._settings, onQuit: () => this.quit()});
+        this._service = new GnomeLensService({onQuit: () => this.quit()});
         this._service.export(connection, objectPath);
         return true;
     }

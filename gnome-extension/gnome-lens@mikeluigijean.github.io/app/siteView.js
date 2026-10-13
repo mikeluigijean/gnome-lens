@@ -1,5 +1,5 @@
-// A web view of one AI site. Contract shared with future views (e.g. a native API chat):
-// `widget` to put in the window, `load()` which loads at most once, `ask(payload)` (Lens).
+// A web view of one AI site: `widget` to put in the window, `load()` which loads at most once,
+// `ask(payload)` to attach content to its prompt box.
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk?version=4.0';
 
@@ -46,7 +46,7 @@ export class SiteView {
         this.load();
         await this._firstLoad;
         this._view.grab_focus();
-        return inject(this._view, {...payload, composer: this._site.composer ?? ''});
+        return inject(this._view, payload);
     }
 
     _createPopup() {

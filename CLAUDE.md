@@ -36,29 +36,35 @@ Target: **extensions.gnome.org, general users.**
   system language. **Attach-only: inject image/text + prompt, never press send** (this replaces v0.1's "no injection" rule).
   Step 1 is a spike: does a synthetic `paste` ClipboardEvent attach images on ChatGPT/Claude/Gemini in WebKitGTK? The fallback is
   the real clipboard + `execute_editing_command(PASTE)`.
-- **v0.3:** more preset sites + custom name/URL sites (enable/order); back/reload/open-in-browser; edge sidebar dock; always on top.
-- **v0.4:** EGO polish: the gschemas.compiled risk for the app, the EGO subprocess policy check, gettext, pack.sh, screenshots.
+- **v0.3 EGO-ready** (reordered 2026-10-13, before the sites/window features): cleanup pass (no unused code, no speculative
+  comments: EGO rejects code that looks AI-generated), `shell-version` `["50"]` only (add 48/49/51 once tested), description
+  declares clipboard/screenshot/website access, `pack.sh`, `docs/review-notes.md`. User decisions: keep the name "Gnome Lens"
+  (no trademark email) and keep the default `ask-selection` shortcut, although EGO guidelines say clipboard shortcuts must
+  ship unbound; if a reviewer objects, set its default to `[]`.
+- **v0.4:** more preset sites + custom name/URL sites (enable/order); back/reload/open-in-browser; edge sidebar dock; always on top.
+  gettext later (not required by EGO).
 - Not wanted: keeping the app alive across screen lock.
 - **Releases:** each version gets an annotated git tag (`v0.1`, `v0.2`, …), pushed with `git push origin <tag>`. From v0.2 on,
   also set `"version-name"` in metadata.json to match.
 
 ## Layout
 ```
-install.sh  README.md  LICENSE  eslint.config.mjs  .gitignore  tests-js/run.js
+install.sh  pack.sh (EGO zip → dist/)  docs/review-notes.md  README.md  LICENSE  eslint.config.mjs  .gitignore  tests-js/run.js
 gnome-extension/gnome-lens@mikeluigijean.github.io/
-  metadata.json  extension.js  prefs.js  icons/gnome-lens-symbolic.svg
+  metadata.json  extension.js  prefs.js  stylesheet.css  icons/gnome-lens-symbolic.svg
   schemas/org.gnome.shell.extensions.gnome-lens.gschema.xml
-  lib/    pure, no Shell/Gtk imports, unit-tested: constants.js dbusIface.js sites.js placement.js
+  lib/    pure, no Shell/Gtk imports, unit-tested: constants.js dbusIface.js sites.js placement.js prompts.js
   shell/  runs in gnome-shell: appLauncher.js hotkeys.js windowTracker.js panelButton.js
-  app/    separate process (gjs -m app/main.js): main.js dbusService.js window.js siteView.js webSession.js settings.js
+          screenshotWatcher.js lensCard.js selection.js
+  app/    separate process (gjs -m app/main.js): main.js dbusService.js window.js siteView.js injector.js webSession.js settings.js
 ```
 
 ## Progress
 - [x] Repo scaffold, LICENSE (credits Dict), .gitignore, eslint config, metadata.json
 - [x] gschema keys: `toggle-chat` as `['<Control><Alt>a']`, `active-site` 'chatgpt', `window-position` enum
       pointer|center, `window-width` 480, `window-height` 720, `pinned` true (since v0.2), `show-panel-icon` true. `--strict --dry-run` passes.
-- [x] `lib/constants.js` (ids + `Keys`, `Position`), `lib/dbusIface.js` (`…GnomeLens1`: Toggle/Show/Hide/Quit, props Visible/Pinned),
-      `lib/sites.js` (`SITES`, `findSite`, `siteIndex`, `DEFAULT_SITE_ID`), `lib/placement.js` (`computePosition`)
+- [x] `lib/constants.js` (ids + `Keys`, `Position`), `lib/dbusIface.js` (`…GnomeLens1`: Toggle/Quit/AskImage/AskText),
+      `lib/sites.js` (`SITES`, `findSite`, `siteIndex`), `lib/placement.js` (`computePosition`)
 - [x] `tests-js/run.js`: 10/10 pass
 - [x] `icons/gnome-lens-symbolic.svg` (Adwaita has no chat icon; load it with `Gio.FileIcon`)
 - [x] `app/`: verified standalone via gdbus (Toggle/Show/Hide/Quit, Visible/Pinned signals, site switch from
@@ -80,7 +86,15 @@ gnome-extension/gnome-lens@mikeluigijean.github.io/
       - Text: `execCommand('insertText')`, falling back to a synthetic text paste; re-checked after hydration. Read with
         `textContent` (`innerText` needs layout). Both verified on ChatGPT and Gemini. Claude untested (the app's session was logged out).
       - Last resort if the text doesn't stick: `Gdk.ContentProvider` on the real clipboard + toast. (`Gdk.Clipboard.set_text` isn't introspectable.)
-- [ ] v0.2 user test in gnome-shell (card, Lens hotkey, selection hotkey, prefs, DND fallback, Claude), then commit + tag `v0.2`.
+- [x] v0.2 committed (`07633b2`, with the searchable language dropdown and pinned-by-default), not tagged yet.
+- [x] Renamed Quick AI → Gnome Lens (`33a8b55`): GitHub repo renamed too. The user's logins were moved to `~/.local/share/gnome-lens`.
+      The local checkout is still `~/scripts/quick-ai` (renaming it is left to the user; re-run install.sh after).
+- [x] v0.3 EGO-ready: cleanup removed the unused D-Bus `Show`/`Hide` and `Visible`/`Pinned`, sites' `kind`, the per-site `composer`
+      selector, `DEFAULT_SITE_ID`. Verified: the Shell 50 `extensionDownloader.js` runs `glib-compile-schemas --strict` on the
+      extension's `schemas/` after an EGO install, so `app/settings.js` works; a simulated install from the `pack.sh` zip starts the app
+      and it quits cleanly.
+- [ ] User test in gnome-shell (card, Lens hotkey, selection hotkey, prefs language dropdown, DND fallback, Claude), then tag `v0.2`
+      and `v0.3`, push, upload `dist/*.zip` to extensions.gnome.org with `docs/review-notes.md`, plus listing screenshots.
 
 ## Design notes worked out for the remaining code
 **app/**

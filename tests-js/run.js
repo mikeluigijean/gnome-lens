@@ -3,7 +3,7 @@ import Gio from 'gi://Gio';
 
 const EXT = '../gnome-extension/gnome-lens@mikeluigijean.github.io/lib';
 const {computePosition} = await import(`${EXT}/placement.js`);
-const {SITES, findSite, siteIndex, DEFAULT_SITE_ID} = await import(`${EXT}/sites.js`);
+const {SITES, findSite, siteIndex} = await import(`${EXT}/sites.js`);
 const {GNOME_LENS_IFACE_XML} = await import(`${EXT}/dbusIface.js`);
 const {IFACE, Position, Action} = await import(`${EXT}/constants.js`);
 const {LANGUAGES, targetLanguage, imagePrompt, textPrompt} = await import(`${EXT}/prompts.js`);
@@ -56,16 +56,15 @@ test('site ids are unique and URLs are https', () => {
         eq(s.url.startsWith('https://'), true, s.id);
 });
 test('unknown site id falls back to the default', () => {
-    eq(findSite('nope').id, DEFAULT_SITE_ID);
+    eq(findSite('nope').id, SITES[0].id);
     eq(siteIndex('claude'), 1);
 });
 
 // ---------- D-Bus interface ----------
 test('interface XML parses and has the expected members', () => {
     const iface = Gio.DBusNodeInfo.new_for_xml(GNOME_LENS_IFACE_XML).lookup_interface(IFACE);
-    eq(iface.methods.map(m => m.name), ['Toggle', 'Show', 'Hide', 'Quit', 'AskImage', 'AskText']);
+    eq(iface.methods.map(m => m.name), ['Toggle', 'Quit', 'AskImage', 'AskText']);
     eq(iface.lookup_method('AskImage').in_args.map(a => a.signature), ['ay', 's']);
-    eq(iface.properties.map(p => p.name), ['Visible', 'Pinned']);
 });
 
 // ---------- prompts ----------

@@ -23,8 +23,6 @@ export class ChatWindow {
         this._started = false;
         this._fileChooserHold = false;
         this._autoHideId = 0;
-        /** Called with the new visibility; set by the D-Bus service. */
-        this.onVisibilityChanged = null;
 
         this._window = new Adw.ApplicationWindow({
             application: app,
@@ -38,7 +36,6 @@ export class ChatWindow {
             this.hide();
             return true;
         });
-        this._window.connect('notify::visible', () => this.onVisibilityChanged?.(this.visible));
         this._window.connect('notify::is-active', () => this._onActiveChanged());
         this._siteChangedId = settings.connect(`changed::${Keys.ACTIVE_SITE}`, () => this._syncSite());
     }
@@ -67,7 +64,7 @@ export class ChatWindow {
     }
 
     /**
-     * Lens: show the chat and attach an image (with a prompt) or a text prompt to the active site.
+     * Show the chat and attach an image (with a prompt) or a text prompt to the active site.
      * Never sends; tells the user with a toast when something couldn't be attached.
      * @param {{png?: Uint8Array, text?: string, action: string}} request
      */
